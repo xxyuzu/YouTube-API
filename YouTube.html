@@ -254,7 +254,7 @@
         .ttbtn {
             width: 14%;
             position: absolute;
-            top: 88%;
+            top: 85%;
             left: 2%;
             animation: dancesecond 2s infinite;
             display: block;
@@ -287,10 +287,16 @@
 <body>
     <main>
         <h1 class="title">YouTube</h1>
-        <form>
-            <input type="search" id="ytSearch" value="" />
-            <button id="searchBtn">🔍</button>
+        <form id="ytForm">
+            <input type="search" id="ytSearch" value="" placeholder="検索..." />
+            <button type="submit" id="searchBtn">🔍</button>
         </form>
+        <select id="searchResults" class="searchlist"></select>
+
+
+
+
+
 
         <!-- <select class="searchlist" style="margin: 20px auto; width: 60%; display: block;">
             <option>検索結果がここに表示されます</option>
@@ -323,6 +329,7 @@
                         <option value="aHTI0SXGVS0">IS THIS LOVE</option>
                         <option value="ISnyONG1dEc">Chasing That Feeling</option>
                         <option value="xhoPI50W6i8">Bad'by WOOYOUNG</option>
+                        <option value="R55VGD7aYUI">YELLOW</option>
                     </select>
                 </li>
             </div>
@@ -331,6 +338,10 @@
             </div>
         </div>
 
+        <div id="progressContainer"
+            style="width: 50%; height: 10px; background: #ccc; margin: 20px auto; border-radius: 5px; overflow: hidden;">
+            <div id="progressBar" style="height: 100%; width: 0%; background: #ea6c98;"></div>
+        </div>
         <nav>
 
             <ul>
@@ -371,7 +382,7 @@
 
         <img class="ttbtn" src="./tt.png" alt="">
         <div id="recommendationBubble"
-            style="display: none; position: absolute; top: 78%; left: 5%; background-color: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); padding: 10px; z-index: 1001;">
+            style="display: none; position: absolute; top: 75%; left: 5%; background-color: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); padding: 10px; z-index: 1001;">
             <div id="thumbnailContainer" style="display: flex; gap: 10px;">
             </div>
             <div
@@ -551,7 +562,7 @@
 
             //授業資料からコピペ
             function ytSearch(val) {
-                const key = 'AIzaSyBbZ5nQ41gNw5e57d9fi7MK-bU9ZirfwNM'; //自分のキーに書き換えます。
+                const key = 'AIzaSyDm8BtM22vPaajbT2sNlI7f9FcEpG-ppyw'; //自分のキーに書き換えます。
                 const num = 10;
                 const part = 'snippet';
                 const type = 'video';
@@ -593,10 +604,11 @@
                 });
             });
 
+
             selectvideo.addEventListener('change', function () {
                 youtubeId = this.value;
                 player.loadVideoById(this.value);
-                onYouTubeIframeAPIReady();
+                // onYouTubeIframeAPIReady();
             });
 
             // おすすめ動画を表示するコンテナを取得
@@ -659,7 +671,23 @@
                 }
             });
 
+            // 再生進行バーの更新
+            function updateProgressBar() {
+                if (player && player.getDuration) {
+                    const duration = player.getDuration();
+                    const currentTime = player.getCurrentTime();
+                    const percentage = (currentTime / duration) * 100;
+                    document.getElementById('progressBar').style.width = percentage + '%';
+                }
+            }
+
+            // 定期的に更新（500msごと）
+            setInterval(updateProgressBar, 500);
+
+
         </script>
+
+
     </main>
 </body>
 
